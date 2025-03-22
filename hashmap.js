@@ -1,7 +1,9 @@
 export class HashMap {
-	constructor(capacity = 50) {
+	constructor(loadFactor = 0.75, capacity = 16) {
+		this.loadFactor = loadFactor;
 		this.capacity = capacity;
 		this.buckets = new Array(capacity);
+		this.size = 0;
 	}
 
 	hash(key) {
@@ -9,7 +11,7 @@ export class HashMap {
 
 		const primeNumber = 31;
 		for (let i = 0; i < key.length; i++) {
-			hashChode = primeNumber * hashChode + key.charCodeAt(i);
+			hashChode = (primeNumber * hashChode + key.charCodeAt(i)) % this.capacity;
 		}
 
 		return hashChode;
@@ -22,7 +24,18 @@ export class HashMap {
 			this.buckets[index] = [];
 		}
 
+		for (let i = 0; i < this.buckets[index].length; i++) {
+			if (this.buckets[index][i][0] === key) {
+				this.buckets[index][i][0] = value;
+				return;
+			}
+		}
+
 		this.buckets[index].push([key, value]);
+		this.size++;
+		if (this.size / this.capacity > this.loadFactor) {
+			this.resize();
+		}
 	}
 
 	get(key) {
@@ -64,6 +77,7 @@ export class HashMap {
 			for (let bucket of this.buckets[index]) {
 				if (bucket[0] === key) {
 					this.buckets.splice(index, 1);
+					this.size--;
 					return true;
 				}
 			}
@@ -72,19 +86,12 @@ export class HashMap {
 	}
 
 	length() {
-		let count = 0;
-
-		this.buckets.forEach((bucket) => {
-			if (bucket) {
-				count++;
-			}
-		});
-
-		return count;
+		return this.size;
 	}
 
 	clear() {
 		this.buckets = [];
+		this.size = 0;
 	}
 
 	keys() {
@@ -122,5 +129,20 @@ export class HashMap {
 		});
 
 		return entries;
+	}
+
+	resize() {
+		const oldBuckets = this.buckets;
+		this.capacity *= 2;
+		this.buckets = new Array(this.capacity);
+		this.size = 0;
+
+		for (let bucket of oldBuckets) {
+			if (bucket) {
+				for (let [k, v] of bucket) {
+					this.set(k, v);
+				}
+			}
+		}
 	}
 }

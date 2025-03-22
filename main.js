@@ -2,5 +2,5 @@ import { HashMap } from './hashmap.js';
 
 const test = new HashMap();
 
-console.log(test.hash('test'));
-console.log(test.hash('tset'));
+test.set('yeah', 'Prrah prrah prrah');
+console.log(test.get('yeah'));

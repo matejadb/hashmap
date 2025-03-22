@@ -1,7 +1,7 @@
 export class HashMap {
-	constructor(loadFactor, capacity = null) {
-		this.loadFactor = loadFactor;
+	constructor(capacity = 50) {
 		this.capacity = capacity;
+		this.buckets = new Array(capacity);
 	}
 
 	hash(key) {
@@ -15,5 +15,27 @@ export class HashMap {
 		return hashChode;
 	}
 
-	set(key, value) {}
+	set(key, value) {
+		let index = this.hash(key);
+
+		if (!this.buckets[index]) {
+			this.buckets[index] = [];
+		}
+
+		this.buckets[index].push([key, value]);
+	}
+
+	get(key) {
+		let index = this.hash(key);
+
+		if (!this.buckets[index]) {
+			throw new Error(`The key doesn't exist in the HashMap`);
+		}
+
+		for (let bucket of this.buckets[index]) {
+			if (bucket[0] === key) {
+				return bucket[1];
+			}
+		}
+	}
 }

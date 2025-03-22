@@ -28,6 +28,10 @@ export class HashMap {
 	get(key) {
 		let index = this.hash(key);
 
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error('Trying to access index out of bounds');
+		}
+
 		if (!this.buckets[index]) {
 			throw new Error(`The key doesn't exist in the HashMap`);
 		}
@@ -37,5 +41,33 @@ export class HashMap {
 				return bucket[1];
 			}
 		}
+	}
+
+	has(key) {
+		let index = this.hash(key);
+
+		if (!this.buckets[index]) {
+			return false;
+		}
+
+		return true;
+	}
+
+	remove(key) {
+		let index = this.hash(key);
+
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error('Trying to access index out of bounds');
+		}
+
+		if (this.buckets[index]) {
+			for (let bucket of this.buckets[index]) {
+				if (bucket[0] === key) {
+					this.buckets.splice(index, 1);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

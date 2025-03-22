@@ -13,7 +13,10 @@ console.log(test.remove('yh'));
  */
 //console.log(test.length());
 //test.clear();
-console.log(test.length());
+//console.log(test.length());
 //console.log(test.has('yeah'));
 //console.log(test.has('yah'));
 //console.log(test.has('ya'));
+console.log(test.keys());
+console.log(test.values());
+console.log(test.entries());

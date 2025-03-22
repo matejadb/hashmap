@@ -86,4 +86,41 @@ export class HashMap {
 	clear() {
 		this.buckets = [];
 	}
+
+	keys() {
+		let allKeys = [];
+
+		this.buckets.forEach((bucket) => {
+			if (bucket) {
+				allKeys.push(bucket[0][0]);
+			}
+		});
+
+		return allKeys;
+	}
+
+	values() {
+		let allValues = [];
+
+		this.buckets.forEach((bucket) => {
+			if (bucket) {
+				allValues.push(bucket[0][1]);
+			}
+		});
+
+		return allValues;
+	}
+
+	entries() {
+		let entries = [];
+
+		this.buckets.forEach((bucket) => {
+			if (bucket) {
+				let toPush = `[${bucket[0][0]}, ${bucket[0][1]}]`;
+				entries.push(`[${bucket[0][0]}, ${bucket[0][1]}]`);
+			}
+		});
+
+		return entries;
+	}
 }
